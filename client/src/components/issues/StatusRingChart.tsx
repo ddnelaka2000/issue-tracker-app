@@ -18,6 +18,7 @@ function RingTooltip({ active, payload }: {
 }) {
   if (!active || !payload?.length) return null;
   const p = payload[0];
+  if (!p) return null;
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-1.5 text-xs shadow-md flex items-center gap-2">
       <span className="h-2 w-2 rounded-full shrink-0" style={{ background: p.payload.color }} />

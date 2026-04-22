@@ -16,7 +16,7 @@ export async function registerUser(input: RegisterInput) {
     password: passwordHash,
   });
 
-  const tokens = issueTokenPair({ sub: user.id, email: user.email });
+  const tokens = issueTokenPair({ sub: String(user._id), email: user.email as string });
   return { user: user.toJSON(), ...tokens };
 }
 
@@ -26,10 +26,10 @@ export async function loginUser(input: LoginInput) {
     throw ApiError.unauthorized('Invalid credentials');
   }
 
-  const ok = await verifyPassword(input.password, user.password);
+  const ok = await verifyPassword(input.password, user.password as string);
   if (!ok) throw ApiError.unauthorized('Invalid credentials');
 
-  const tokens = issueTokenPair({ sub: user.id, email: user.email });
+  const tokens = issueTokenPair({ sub: String(user._id), email: user.email as string });
   return { user: user.toJSON(), ...tokens };
 }
 

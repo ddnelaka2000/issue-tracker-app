@@ -8,12 +8,9 @@ function requireUserId(req: Request): string {
   return req.user.sub;
 }
 
-export async function list(
-  req: Request<unknown, unknown, unknown, ListIssuesQuery>,
-  res: Response,
-) {
+export async function list(req: Request, res: Response) {
   const userId = requireUserId(req);
-  const result = await issueService.listIssues(userId, req.query);
+  const result = await issueService.listIssues(userId, req.query as unknown as ListIssuesQuery);
   res.json(result);
 }
 
@@ -29,12 +26,9 @@ export async function getById(req: Request<{ id: string }>, res: Response) {
   res.json({ issue });
 }
 
-export async function create(
-  req: Request<unknown, unknown, CreateIssueInput>,
-  res: Response,
-) {
+export async function create(req: Request, res: Response) {
   const userId = requireUserId(req);
-  const issue = await issueService.createIssue(userId, req.body);
+  const issue = await issueService.createIssue(userId, req.body as CreateIssueInput);
   res.status(201).json({ issue });
 }
 

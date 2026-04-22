@@ -10,8 +10,7 @@ function setRefreshCookie(res: Response, token: string) {
   res.cookie(REFRESH_COOKIE, token, {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
-    sameSite: env.NODE_ENV === 'production' ? 'strict' : 'lax',
-    signed: true,
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days — should mirror JWT_REFRESH_EXPIRES_IN
     path: '/api/auth',
   });
@@ -34,7 +33,7 @@ export async function login(req: Request<unknown, unknown, LoginInput>, res: Res
 }
 
 export async function refresh(req: Request, res: Response) {
-  const token = req.signedCookies?.[REFRESH_COOKIE];
+  const token = req.cookies?.[REFRESH_COOKIE];
   const { accessToken, refreshToken } = await authService.refreshTokens(token);
   setRefreshCookie(res, refreshToken);
   res.json({ accessToken });

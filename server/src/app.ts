@@ -1,4 +1,4 @@
-import express, { type Application, type Request, type Response } from 'express';
+import express, { type Application } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -12,7 +12,6 @@ import { authRouter } from '@/modules/auth/auth.routes';
 import { issueRouter } from '@/modules/issues/issue.routes';
 import { apiLimiter } from '@/middleware/rateLimit.middleware';
 import { errorHandler, notFoundHandler } from '@/middleware/error.middleware';
-import '@/types/express.d';
 
 export function createApp(): Application {
   const app = express();
@@ -22,12 +21,15 @@ export function createApp(): Application {
 
   // Security
   app.use(helmet());
-  app.use(
-    cors({
-      origin: env.CLIENT_ORIGIN,
-      credentials: true,
-    }),
-  );
+
+  const corsOptions = {
+    origin: env.CLIENT_ORIGIN,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  app.options('*', cors(corsOptions));
+  app.use(cors(corsOptions));
 
   // Parsing
   app.use(express.json({ limit: '100kb' }));
@@ -50,7 +52,8 @@ export function createApp(): Application {
   app.use('/api', apiLimiter);
 
   // Health check
-  app.get('/api/health', (_req: Request, res: Response) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  app.get('/api/health', (_req: any, res: any) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 

@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { MongoServerError } from 'mongodb';
 import mongoose from 'mongoose';
+
+const { MongoServerError } = mongoose.mongo;
 import { ApiError } from '@/utils/ApiError';
 import { env } from '@/config/env';
 import { logger } from '@/config/logger';
@@ -53,8 +54,8 @@ function normalize(err: unknown): { status: number; body: ErrorResponse } {
   }
 
   // Duplicate key
-  if (err instanceof MongoServerError && err.code === 11000) {
-    const field = Object.keys(err.keyValue ?? {})[0] ?? 'field';
+  if (err instanceof MongoServerError && (err.code as number) === 11000) {
+    const field = Object.keys((err.keyValue as Record<string, unknown>) ?? {})[0] ?? 'field';
     return {
       status: 409,
       body: { error: { message: `${field} already exists`, code: 'DUPLICATE_KEY' } },

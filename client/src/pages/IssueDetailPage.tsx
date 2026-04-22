@@ -32,7 +32,6 @@ import {
 } from '@/features/issues/hooks';
 import { useStatusChange } from '@/hooks/useStatusChange';
 import { getErrorMessage } from '@/lib/api';
-import { cn } from '@/lib/utils';
 import type { IssueStatus } from '@/types/issue';
 
 const ALL_STATUSES: IssueStatus[] = ['open', 'in_progress', 'resolved', 'closed'];

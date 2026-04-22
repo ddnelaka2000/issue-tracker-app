@@ -146,8 +146,8 @@ export const BoardView = ({ onNewIssue, searchQuery }: BoardViewProps) => {
           [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border"
       >
         <div className="flex min-w-max gap-4 pt-1 pb-3 pr-4">
-          {COLUMNS.map((col) => (
-            <BoardColumn key={col.key} {...col} onNewIssue={onNewIssue} searchQuery={searchQuery} />
+          {COLUMNS.map(({ key, ...col }) => (
+            <BoardColumn key={key} {...col} onNewIssue={onNewIssue} searchQuery={searchQuery} />
           ))}
         </div>
       </div>

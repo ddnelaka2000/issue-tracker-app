@@ -15,7 +15,7 @@ export async function connectDatabase(): Promise<void> {
     logger.info({ uri: maskUri(env.MONGODB_URI) }, '✓ MongoDB connected');
   } catch (err) {
     logger.fatal({ err }, '✗ MongoDB connection failed');
-    process.exit(1);
+    throw err;
   }
 
   mongoose.connection.on('error', (err) => logger.error({ err }, 'MongoDB error'));

@@ -28,7 +28,7 @@ const userSchema = new Schema(
     toJSON: {
       virtuals: true,
       versionKey: false,
-      transform: (_doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown>) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
@@ -38,8 +38,6 @@ const userSchema = new Schema(
   },
 );
 
-// Index the email for lookup-by-email during login
-userSchema.index({ email: 1 }, { unique: true });
 
 export type UserDoc = HydratedDocument<InferSchemaType<typeof userSchema>>;
 export type UserModel = Model<InferSchemaType<typeof userSchema>>;

@@ -64,16 +64,19 @@ export async function createIssue(userId: string, input: CreateIssueInput) {
 }
 
 export async function updateIssue(userId: string, issueId: string, input: UpdateIssueInput) {
+  const updateData: Record<string, unknown> = { ...input };
+
+  if (input.status) {
+    updateData.resolvedAt = input.status === 'resolved' ? new Date() : null;
+    updateData.closedAt = input.status === 'closed' ? new Date() : null;
+  }
+
   const issue = await Issue.findOneAndUpdate(
     { _id: issueId, createdBy: userId },
-    { $set: input },
+    { $set: updateData },
     { new: true, runValidators: true, context: 'query' },
   );
   if (!issue) throw ApiError.notFound('Issue not found');
-
-  if (input.status) {
-    await issue.save();
-  }
 
   return issue.toJSON();
 }

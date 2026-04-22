@@ -5,7 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "vercel-build": "npm run build",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.ts'"
@@ -37,6 +38,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.14.11",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   }
