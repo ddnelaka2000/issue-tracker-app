@@ -1,0 +1,12 @@
+{
+  "name": "issue-tracker",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"api,web\" --prefix-colors \"cyan,magenta\" \"pnpm --filter ./server dev\" \"pnpm --filter ./client dev\"",
+    "build": "pnpm --filter ./server build && pnpm --filter ./client build",
+    "start": "pnpm --filter ./server start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
