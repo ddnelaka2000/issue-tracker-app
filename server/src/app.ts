@@ -48,9 +48,6 @@ export function createApp(): Application {
     );
   }
 
-  // Global rate limit (auth routes get stricter limit inside their router)
-  app.use('/api', apiLimiter);
-
   // Health check
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   app.get('/api/health', (_req: any, res: any) => {
@@ -60,6 +57,9 @@ export function createApp(): Application {
   // Routes
   app.use('/api/auth', authRouter);
   app.use('/api/issues', issueRouter);
+
+  // Global rate limit (auth routes get stricter limit inside their router)
+  //app.use('/api', apiLimiter);
 
   // error handler
   app.use(notFoundHandler);
